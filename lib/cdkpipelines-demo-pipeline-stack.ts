@@ -1,4 +1,5 @@
 import { Construct, StackProps, Stack, SecretValue } from '@aws-cdk/core';
+import { CdkpipelinesDemoStage } from './cdkpipelines-demo-stage';
 import {
   CodePipeline,
   CodePipelineSource,
@@ -19,5 +20,11 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
         commands: ['npm ci', 'npm run build', 'npx cdk synth'],
       }),
     });
+
+    pipeline.addStage(
+      new CdkpipelinesDemoStage(this, 'PreProd', {
+        env: { account: '013935887008', region: 'us-west-2' },
+      })
+    );
   }
 }
