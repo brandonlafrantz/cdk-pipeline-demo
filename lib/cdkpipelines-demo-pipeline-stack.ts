@@ -24,7 +24,7 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
     pipeline.addStage(
       new CdkpipelinesDemoStage(this, 'PreProd', {
         env: {
-          account: 'arn:aws:iam::013935887008:user/account1',
+          account: '013935887008',
           region: 'us-west-2',
         },
       })
