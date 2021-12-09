@@ -22,14 +22,23 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
       }),
     });
 
-    pipeline.addStage(
-      new CdkpipelinesDemoStage(this, 'PreProd', {
-        env: {
-          account: '013935887008',
-          region: 'us-west-2',
-        },
-      })
-    );
+    const preprod = new CdkpipelinesDemoStage(this, 'PreProd', {
+      env: {
+        account: '013935887008',
+        region: 'us-west-2',
+      },
+    });
+
+    const preprodStage = pipeline.addStage(preprod, {
+      post: [
+        new ShellStep('TestService', {
+          commands: ['curl -Ssf $ENDPOINT_URL'],
+          envFromCfnOutputs: {
+            ENDPOINT_URL: preprod.urlOutput,
+          },
+        }),
+      ],
+    });
 
     pipeline.addStage(
       new CdkpipelinesDemoStage(this, 'Prod', {
